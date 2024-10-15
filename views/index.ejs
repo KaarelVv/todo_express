@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Compiled and minified CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    
     <title>Todo List</title>
 </head>
 
@@ -29,11 +30,11 @@
                         </div>
                     </div>
                     <div class="card-action">
-                        <ul>
-                            <li class="collection-itme">Study HTML</li>
-                            <li class="collection-itme">Study HTML</li>
-                            <li class="collection-itme">Study HTML</li>
-                            <li class="collection-itme">Study HTML</li>
+                        <ul class="collection">
+                            <% console.log(tasks)%>
+                          <% tasks.forEach((task) => { %>
+                           <li class="collection-item"><%= task  %></li>
+                          <% }) %>
                         </ul>
                     </div>
                 </div>
@@ -43,7 +44,7 @@
 
     <!-- Compiled and minified CSS -->
     <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"> -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"></script> -->
 </body>
 
 </html>
