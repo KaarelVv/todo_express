@@ -26,7 +26,7 @@ app.get('/', (req, res) => {
   // get tasks from file
   readFile('./tasks.json')
     .then(tasks => {
-      console.log(tasks)
+      // console.log(tasks)
       res.render('index', { tasks: tasks })
     })
 });
@@ -68,11 +68,31 @@ app.post('/', (req, res) => {
         // redirect to / to see result
         res.redirect('/');
       })
-      console.log(data);
+      
     })
 })
 
+app.get('/delete-task/:taskId', (req,res) => {
+  let deletedTaskId = (req.params.taskId);
+  readFile('./tasks.json')
+  .then(tasks => {
+    tasks.forEach((task, index) => {
+      if(task.id == deletedTaskId){
+        tasks.splice(index, 1)
+      } 
+    } )
+    data = JSON.stringify(tasks, null, 2)
+    fs.writeFile('./tasks.json', data, 'utf-8', err => {
+      if(err){
+        console.log(err)
+        return;
+      } 
+      res.redirect('/');
+    })
+  } )
+} )
+
 
 app.listen(3001, () => {
-  console.log("Server is running on port 3001");
+  console.log("Server is running on http://localhost:3001/");
 })
