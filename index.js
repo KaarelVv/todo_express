@@ -24,16 +24,16 @@ const readFile = (filename) => {
 }
 
 const writeFile = (filename, data) => {
-  return new Promise((resolve, reject) =>{
+  return new Promise((resolve, reject) => {
     fs.writeFile('./tasks.json', data, 'utf-8', err => {
-      if(err){
+      if (err) {
         console.log(err)
         return;
-      } 
+      }
       resolve(true)
     })
-  } )
-} 
+  })
+}
 
 app.get('/', (req, res) => {
   // get tasks from file
@@ -57,7 +57,7 @@ app.post('/', (req, res) => {
       if (tasks.length === 0) {
         index = 1
       } else {
-        index = tasks[tasks.length -1].id + 1;
+        index = tasks[tasks.length - 1].id + 1;
       }
       // create task object
       const newTask = {
@@ -72,29 +72,43 @@ app.post('/', (req, res) => {
       console.log(data);
 
       writeFile('tasks.json', data)
-        // redirect to / to see result
-        res.redirect('/')
-      
-      
+      // redirect to / to see result
+      res.redirect('/')
     })
 })
 
-app.get('/delete-task/:taskId', (req,res) => {
+app.get('/delete-task/:taskId', (req, res) => {
   let deletedTaskId = (req.params.taskId);
   readFile('./tasks.json')
-  .then(tasks => {
-    tasks.forEach((task, index) => {
-      if(task.id == deletedTaskId){
-        tasks.splice(index, 1)
-      } 
-    } )
-    data = JSON.stringify(tasks, null, 2)
-   
-    writeFile('tasks.json', data)
+    .then(tasks => {
+      tasks.forEach((task, index) => {
+        if (task.id == deletedTaskId) {
+          tasks.splice(index, 1)
+        }
+      })
+      data = JSON.stringify(tasks, null, 2)
+
+      writeFile('tasks.json', data)
       res.redirect('/');
-    
-  } )
-} )
+
+    })
+})
+
+app.get('/delete-all-tasks/', (req, res) => {
+  readFile('./tasks.json')
+    .then(tasks => {
+      console.log(tasks);
+      if (tasks.length !== 0){
+        const emptyTasks = [
+        ]
+        data = JSON.stringify(emptyTasks);
+        writeFile('tasks.json', data)
+      } else {
+        res.redirect('/')
+      }
+
+    })
+})
 
 
 app.listen(3001, () => {
