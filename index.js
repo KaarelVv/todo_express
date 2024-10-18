@@ -98,12 +98,17 @@ app.get('/delete-all-tasks/', (req, res) => {
   readFile('./tasks.json')
     .then(tasks => {
       console.log(tasks);
+      // when there are tasks, go into method
       if (tasks.length !== 0){
+        // create empty object
         const emptyTasks = [
         ]
+        // converts into JSON object
         data = JSON.stringify(emptyTasks);
+        // writes empty file over existing file
         writeFile('tasks.json', data)
       } else {
+        // if file is not empty, redirects to index page
         res.redirect('/')
       }
 
