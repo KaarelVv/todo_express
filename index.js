@@ -22,6 +22,19 @@ const readFile = (filename) => {
     });
   })
 }
+
+const writeFile = (filename, data) => {
+  return new Promise((resolve, reject) =>{
+    fs.writeFile('./tasks.json', data, 'utf-8', err => {
+      if(err){
+        console.log(err)
+        return;
+      } 
+      resolve(true)
+    })
+  } )
+} 
+
 app.get('/', (req, res) => {
   // get tasks from file
   readFile('./tasks.json')
@@ -42,7 +55,7 @@ app.post('/', (req, res) => {
       // create new id automatically
       let index
       if (tasks.length === 0) {
-        index = 0
+        index = 1
       } else {
         index = tasks[tasks.length -1].id + 1;
       }
@@ -58,16 +71,10 @@ app.post('/', (req, res) => {
       data = JSON.stringify(tasks, null, 2);
       console.log(data);
 
-      fs.writeFile('./tasks.json', data, 'utf-8', err => {
-        if (err) {
-          console.error(err);
-          return;
-        } else {
-          console.log('saved')
-        }
+      writeFile('tasks.json', data)
         // redirect to / to see result
-        res.redirect('/');
-      })
+        res.redirect('/')
+      
       
     })
 })
@@ -82,13 +89,10 @@ app.get('/delete-task/:taskId', (req,res) => {
       } 
     } )
     data = JSON.stringify(tasks, null, 2)
-    fs.writeFile('./tasks.json', data, 'utf-8', err => {
-      if(err){
-        console.log(err)
-        return;
-      } 
+   
+    writeFile('tasks.json', data)
       res.redirect('/');
-    })
+    
   } )
 } )
 
