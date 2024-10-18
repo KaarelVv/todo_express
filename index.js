@@ -25,7 +25,7 @@ const readFile = (filename) => {
 
 const writeFile = (filename, data) => {
   return new Promise((resolve, reject) => {
-    fs.writeFile('./tasks.json', data, 'utf-8', err => {
+    fs.writeFile(filename, data, 'utf-8', err => {
       if (err) {
         console.log(err)
         return;
@@ -87,10 +87,9 @@ app.get('/delete-task/:taskId', (req, res) => {
         }
       })
       data = JSON.stringify(tasks, null, 2)
-
+      
       writeFile('tasks.json', data)
       res.redirect('/');
-
     })
 })
 
@@ -99,19 +98,16 @@ app.get('/delete-all-tasks/', (req, res) => {
     .then(tasks => {
       console.log(tasks);
       // when there are tasks, go into method
-      if (tasks.length !== 0){
+      if (tasks.length !== 0) {
         // create empty object
-        const emptyTasks = [
-        ]
+        const emptyTasks = []
         // converts into JSON object
         data = JSON.stringify(emptyTasks);
-        // writes empty file over existing file
-        writeFile('tasks.json', data)
-      } else {
-        // if file is not empty, redirects to index page
-        res.redirect('/')
       }
-
+      // writes empty file over existing file
+      writeFile('tasks.json', data)
+      // if file is not empty, redirects to index page
+      res.redirect('/')
     })
 })
 
