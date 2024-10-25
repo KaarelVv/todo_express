@@ -1,3 +1,4 @@
+const { error } = require("console");
 const express = require("express");
 const app = express();
 const fs = require('fs');
@@ -40,7 +41,7 @@ app.get('/', (req, res) => {
   readFile('./tasks.json')
     .then(tasks => {
       // console.log(tasks)
-      res.render('index', { tasks: tasks })
+      res.render('index', { tasks: tasks, error: null })
     })
 });
 
@@ -48,33 +49,47 @@ app.get('/', (req, res) => {
 app.use(express.urlencoded({ extended: true }));
 
 app.post('/', (req, res) => {
-  // task list data from file
-  readFile('./tasks.json')
-    .then(tasks => {
-      // add new task
-      // create new id automatically
-      let index
-      if (tasks.length === 0) {
-        index = 1
-      } else {
-        index = tasks[tasks.length - 1].id + 1;
-      }
-      // create task object
-      const newTask = {
-        "id": index,
-        "task": req.body.task
-      }
-      console.log(newTask);
-      // add form sent task to task array
-      tasks.push(newTask);
-      console.log(tasks);
-      data = JSON.stringify(tasks, null, 2);
-      console.log(data);
+  // control data from file
+  let error = null
+  if (req.body.task.trim().length == 0) {
+    error = 'Please insert correct task data'
+    readFile('./tasks.json')
+      .then(tasks => {
+        res.render('index', {
+          tasks: tasks,
+          error: error
+        })
+      })
 
-      writeFile('tasks.json', data)
-      // redirect to / to see result
-      res.redirect('/')
-    })
+  } else {
+    // task list data from file
+    readFile('./tasks.json')
+      .then(tasks => {
+        // add new task
+        // create new id automatically
+        let index
+        if (tasks.length === 0) {
+          index = 1
+        } else {
+          index = tasks[tasks.length - 1].id + 1;
+        }
+        // create task object
+        const newTask = {
+          "id": index,
+          "task": req.body.task
+        }
+        console.log(newTask);
+        // add form sent task to task array
+        tasks.push(newTask);
+        console.log(tasks);
+        data = JSON.stringify(tasks, null, 2);
+        console.log(data);
+
+        writeFile('tasks.json', data)
+        // redirect to / to see result
+        res.redirect('/')
+      })
+  }
 })
 
 app.get('/delete-task/:taskId', (req, res) => {
@@ -87,10 +102,33 @@ app.get('/delete-task/:taskId', (req, res) => {
         }
       })
       data = JSON.stringify(tasks, null, 2)
-      
+
       writeFile('tasks.json', data)
       res.redirect('/');
     })
+})
+app.get('/update-task/:taskId', (req, res) => {
+  let updateTask = (req.params.taskId);
+  console.log(updateTask)
+  readFile('./tasks.json')
+    .then(tasks => {
+      let updateTask
+      tasks.forEach((task, index) => {
+        if (task.id == updateTask) {
+          updateTask = task.task
+
+        }
+      })
+      res.render('update', {
+        updateTask: updateTask,
+        updateaTaskId: updateTaskId,
+        error: null
+      }
+
+      )
+    })
+
+
 })
 
 app.get('/delete-all-tasks/', (req, res) => {
