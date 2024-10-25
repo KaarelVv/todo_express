@@ -1,4 +1,5 @@
 const { error } = require("console");
+const { promises } = require("dns");
 const express = require("express");
 const app = express();
 const fs = require('fs');
@@ -44,6 +45,17 @@ app.get('/', (req, res) => {
       res.render('index', { tasks: tasks, error: null })
     })
 });
+
+app.get('/update', (req, res) => {
+  // get tasks from file
+  readFile('./tasks.json')
+    .then(tasks => {
+      res.render('update', { tasks: tasks, error: null })
+      
+
+    })
+});
+
 
 // for parsing application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true }));
@@ -107,7 +119,8 @@ app.get('/delete-task/:taskId', (req, res) => {
       res.redirect('/');
     })
 })
-app.get('/update-task/:taskId', (req, res) => {
+
+app.post('/update-task/:taskId', (req, res) => {
   let updateTask = (req.params.taskId);
   console.log(updateTask)
   readFile('./tasks.json')
@@ -127,8 +140,6 @@ app.get('/update-task/:taskId', (req, res) => {
 
       )
     })
-
-
 })
 
 app.get('/delete-all-tasks/', (req, res) => {
