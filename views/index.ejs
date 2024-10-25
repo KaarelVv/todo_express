@@ -16,20 +16,29 @@
             <div class="col s12">
                 <div class="card">
                     <div class="card-content">
-                        <span class="card-title">ToDo List</span>
-                        <div class="row">
-                            <form class="col s12" method="post" action="/">
-                                <div class="row">
-                                    <div class="input-field col s12">
-                                        <label for="task" class="active">Insert task</label>
-                                        <input placeholder="Task" id="task" type="text" name="task" class="validate">
-
-
-                                    </div>
+                        <% if(error !==0) { %>
+                            <div class="row teal lighten-4">
+                                <div class="col s12">
+                                    <p class="center-align">
+                                        <%= error %>
+                                    </p>
                                 </div>
-                                <input class="btn" type="submit" value="Add Task">
-                            </form>
-                        </div>
+                            </div>
+                            <% }%>
+                                <% console.log(error) %>
+                                    <span class="card-title">ToDo List</span>
+                                    <div class="row">
+                                        <form class="col s12" method="post" action="/">
+                                            <div class="row">
+                                                <div class="input-field col s12">
+                                                    <label for="task" class="active">Insert task</label>
+                                                    <input placeholder="Task" id="task" type="text" name="task"
+                                                        class="validate">
+                                                </div>
+                                            </div>
+                                            <input class="btn" type="submit" value="Add Task">
+                                        </form>
+                                    </div>
                     </div>
                     <div class="card-action">
                         <ul class="collection">
@@ -37,8 +46,10 @@
                                 <% tasks.forEach((task)=> { %>
                                     <li class="collection-item">
                                         <%= task.task %>
-                                            <a href="delete-task/<%= task.id %>" class="secondary-content"><i
-                                                    class="material-icons">delete</i></a>
+                                            <a href="delete-task/<%= task.id %>" class="secondary-content">
+                                                <i class="material-icons">delete</i></a>
+                                            <a href="update-task/<%= task.id %>" class="secondary-content">
+                                                <i class="material-icons">edit</i></a>
                                     </li>
                                     <% }) %>
                         </ul>
