@@ -46,12 +46,14 @@ app.get('/', (req, res) => {
     })
 });
 
-app.get('/update', (req, res) => {
+app.get('/update/:taskId', (req, res) => {
   // get tasks from file
   readFile('./tasks.json')
     .then(tasks => {
-      res.render('update', { tasks: tasks, error: null })
-      
+      const taskId = Number(req.params.taskId);
+      const task = tasks.find(t => t.id === taskId);
+      console.log({ task });
+      res.render('update', { task, error: null });
 
     })
 });
@@ -104,6 +106,26 @@ app.post('/', (req, res) => {
   }
 })
 
+app.post('/update-task/', (req, res) => {
+  const { id, task } = req.body;
+
+  console.log('Task Id: ', id);
+  console.log('Task name: ', task);
+
+  readFile('./tasks.json')
+    .then(tasks => {
+      tasks.forEach((id, task) => {
+        let updatedTask
+        if (task.id == id) {
+
+        }
+
+
+      })
+
+    })
+})
+
 app.get('/delete-task/:taskId', (req, res) => {
   let deletedTaskId = (req.params.taskId);
   readFile('./tasks.json')
@@ -117,28 +139,6 @@ app.get('/delete-task/:taskId', (req, res) => {
 
       writeFile('tasks.json', data)
       res.redirect('/');
-    })
-})
-
-app.post('/update-task/:taskId', (req, res) => {
-  let updateTask = (req.params.taskId);
-  console.log(updateTask)
-  readFile('./tasks.json')
-    .then(tasks => {
-      let updateTask
-      tasks.forEach((task, index) => {
-        if (task.id == updateTask) {
-          updateTask = task.task
-
-        }
-      })
-      res.render('update', {
-        updateTask: updateTask,
-        updateaTaskId: updateTaskId,
-        error: null
-      }
-
-      )
     })
 })
 
