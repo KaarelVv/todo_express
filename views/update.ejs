@@ -30,10 +30,10 @@
                                     <form class="col s12" method="post" action="/update-task">
                                         <div class="row">
                                             <div class="input-field col s12">
+                                                <label for="task" class="active">Update Task</label>
                                                 <input value="<%= task.id %>" id="taskId" type="hidden" name="id">
                                                 <input value="<%= task.task %>" id="task" type="text" name="task"
                                                     class="validate">
-                                                <label for="task" class="active">Update Task</label>
                                             </div>
                                         </div>
                                         <input class="btn" type="submit" value="Update Task">
