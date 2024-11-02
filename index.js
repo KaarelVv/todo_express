@@ -9,7 +9,6 @@ const path = require("path");
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
-
 const readFile = (filename) => {
   return new Promise((resolve, reject) => {
     // get tasks from file
@@ -181,7 +180,6 @@ app.get('/delete-all-tasks/', (req, res) => {
       res.redirect('/')
     })
 })
-
 
 app.listen(3001, () => {
   console.log("Server is running on http://localhost:3001/");
