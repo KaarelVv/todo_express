@@ -16,21 +16,30 @@
             <div class="col s12">
                 <div class="card">
                     <div class="card-content">
-                        <span class="card-title">ToDo List</span>
-                        <div class="row">
-                            <form class="col s12" method="post" action="/update-task">
-                                <div class="row">
-                                    <div class="input-field col s12">
-                                        <input value="<%= task.task %>" id="task" type="text" name="task"
-                                            class="validate">
-                                        <input value="<%= task.id %>" id="taskId" type="hidden" name="id" >
-                                        <label for="task" class="active">Update Task</label>
-                                    </div>
+                        <% if(error !==0) { %>
+                            <div class="row teal lighten-4">
+                                <div class="col s12">
+                                    <p class="center-align">
+                                        <%= error %>
+                                    </p>
                                 </div>
-                                <input class="btn" type="submit" value="Update Task">
-                                <a class="btn" href="/">Cancel</a>
-                            </form>
-                        </div>
+                            </div>
+                            <% }%>
+                                <span class="card-title">ToDo List</span>
+                                <div class="row">
+                                    <form class="col s12" method="post" action="/update-task">
+                                        <div class="row">
+                                            <div class="input-field col s12">
+                                                <input value="<%= task.id %>" id="taskId" type="hidden" name="id">
+                                                <input value="<%= task.task %>" id="task" type="text" name="task"
+                                                    class="validate">
+                                                <label for="task" class="active">Update Task</label>
+                                            </div>
+                                        </div>
+                                        <input class="btn" type="submit" value="Update Task">
+                                        <a class="btn" href="/">Cancel</a>
+                                    </form>
+                                </div>
                     </div>
                 </div>
             </div>

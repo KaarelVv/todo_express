@@ -52,12 +52,18 @@ app.get('/update/:taskId', (req, res) => {
     .then(tasks => {
       const taskId = Number(req.params.taskId);
       const task = tasks.find(t => t.id === taskId);
-      console.log({ task });
+      console.log('Task for updating =>', task)
+      //       let task;
+      // for (const t of tasks) {
+      //   if (t.id === taskId) {
+      //     task = t;
+      //     break;
+      //   }
+      //   }
       res.render('update', { task, error: null });
 
     })
 });
-
 
 // for parsing application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true }));
@@ -107,25 +113,39 @@ app.post('/', (req, res) => {
 })
 
 app.post('/update-task/', (req, res) => {
- 
-  let updatedTaskId = Number(req.body.id);
-  let updatedTask = (req.body.task);
-  console.log('Task Id: ', updatedTaskId);
-  console.log('Task name: ', updatedTask);
 
-  readFile('./tasks.json')
-    .then(tasks => {
-      console.log('-----',tasks);
-      for(var i=0; i<tasks.length;i++){
-        if(tasks[i].id == updatedTaskId){
-          tasks[i].task = updatedTask;
-          console.log('updated ', tasks)
+  const updatedTaskId = Number(req.body.id);
+  const updatedTask = (req.body.task);
+  const task = req.body;
+
+  // console.log('Task Id: ', updatedTaskId);
+  // console.log('Task name: ', updatedTask);
+  console.log('Task data from update form => ', task)
+  let error = null
+  if (req.body.task.trim().length == 0) {
+    error = 'Please insert correct task data'
+    readFile('./tasks.json')
+      .then(tasks => {
+        const taskId = updatedTaskId;
+        const task = tasks.find(t => t.id === taskId);
+        res.render('update', { task, error: error });
+      });
+
+  } else {
+    readFile('./tasks.json')
+      .then(tasks => {
+
+        for (var i = 0; i < tasks.length; i++) {
+          if (tasks[i].id == updatedTaskId) {
+            tasks[i].task = updatedTask;
+            // console.log('updated ', tasks)
+          }
         }
-      }
-      data = JSON.stringify(tasks, null, 2);
-      writeFile('tasks.json', data);
-      res.redirect('/')
-    })
+        data = JSON.stringify(tasks, null, 2);
+        writeFile('tasks.json', data);
+        res.redirect('/')
+      })
+  }
 })
 
 app.get('/delete-task/:taskId', (req, res) => {
