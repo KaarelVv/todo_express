@@ -107,22 +107,24 @@ app.post('/', (req, res) => {
 })
 
 app.post('/update-task/', (req, res) => {
-  const { id, task } = req.body;
-
-  console.log('Task Id: ', id);
-  console.log('Task name: ', task);
+ 
+  let updatedTaskId = Number(req.body.id);
+  let updatedTask = (req.body.task);
+  console.log('Task Id: ', updatedTaskId);
+  console.log('Task name: ', updatedTask);
 
   readFile('./tasks.json')
     .then(tasks => {
-      tasks.forEach((id, task) => {
-        let updatedTask
-        if (task.id == id) {
-
+      console.log('-----',tasks);
+      for(var i=0; i<tasks.length;i++){
+        if(tasks[i].id == updatedTaskId){
+          tasks[i].task = updatedTask;
+          console.log('updated ', tasks)
         }
-
-
-      })
-
+      }
+      data = JSON.stringify(tasks, null, 2);
+      writeFile('tasks.json', data);
+      res.redirect('/')
     })
 })
 
